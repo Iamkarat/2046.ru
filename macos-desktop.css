@@ -1,0 +1,290 @@
+/* --- ПОДКЛЮЧЕНИЕ ШРИФТА --- */
+@font-face {
+    font-family: 'MyFont';
+    src: url('fonts/myfont.ttf') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'MyFont', sans-serif;
+    user-select: none;
+}
+
+body {
+    background: url('images/desktop-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* --- ВЕРХНЯЯ ПАНЕЛЬ --- */
+.macos-bar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 28px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+    color: #fff;
+    font-size: 13px;
+}
+
+.macos-left, .macos-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.apple-logo { font-size: 16px; }
+.app-name { font-weight: 600; }
+.menu-item { cursor: pointer; opacity: 0.9; }
+.menu-item:hover { opacity: 1; }
+
+/* --- РАБОЧИЙ СТОЛ --- */
+.macos-desktop {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 28px - 80px);
+    padding: 50px;
+}
+
+/* === ВСЕ ИКОНКИ === */
+.desktop-icon {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    width: 100px;
+    z-index: 10;
+}
+
+.desktop-icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* === ПАПКИ MACOS === */
+.folder-icon {
+    margin-bottom: 5px;
+    transition: transform 0.2s;
+}
+
+.desktop-icon:hover .folder-icon {
+    transform: scale(1.1);
+}
+
+.macos-folder svg {
+    width: 70px;
+    height: 60px;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+}
+
+.folder-name {
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    font-weight: 500;
+}
+
+/* === ФАЙЛЫ === */
+.file-icon {
+    width: 60px;
+    height: 70px;
+    background: #fff;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    overflow: hidden;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+}
+
+.file-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.file-icon svg {
+    width: 50px;
+    height: 60px;
+}
+
+.file-icon span { font-size: 32px; }
+
+.file-name {
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+/* === КАРТИНЫ-ИКОНКИ === */
+.art-file {
+    border: 2px solid #00ff00; /* Зелёная рамка для картин */
+}
+
+.art-file img {
+    filter: grayscale(50%);
+    transition: filter 0.3s;
+}
+
+.desktop-icon:hover .art-file img {
+    filter: grayscale(0%);
+}
+
+/* === ОКНА === */
+.macos-window {
+    position: absolute;
+    top: 100px;
+    left: 200px;
+    width: 600px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    overflow: hidden;
+    z-index: 100;
+    animation: windowOpen 0.3s ease;
+}
+
+@keyframes windowOpen {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.window-header {
+    background: linear-gradient(180deg, #e8e8e8 0%, #d4d4d4 100%);
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    cursor: move;
+    border-bottom: 1px solid #bbb;
+}
+
+.window-buttons { display: flex; gap: 8px; }
+
+.btn-close, .btn-minimize, .btn-maximize {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.btn-close { background: #ff5f57; }
+.btn-minimize { background: #febc2e; }
+.btn-maximize { background: #28c840; }
+
+.window-title {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+}
+
+.window-content {
+    padding: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Окно предпросмотра картин */
+.art-preview .window-content {
+    padding: 0;
+    background: #000;
+}
+
+.art-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.photo-grid img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.video-player {
+    width: 100%;
+    background: #000;
+}
+
+.video-player video { width: 100%; display: block; }
+
+.bio-content h2 { font-size: 24px; margin-bottom: 10px; }
+.bio-city { color: #00ff00; font-weight: 600; margin-bottom: 20px; }
+.bio-text { line-height: 1.8; color: #333; }
+
+.social-links { display: flex; flex-direction: column; gap: 10px; }
+
+.social-btn {
+    padding: 12px 20px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.social-btn:hover { background: #00ff00; color: #000; }
+
+.image-preview .window-content { padding: 0; }
+.image-preview img { width: 100%; display: block; }
+
+.doc-content {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+}
+.doc-content p { margin-bottom: 8px; }
+
+/* === ДОК === */
+.macos-dock {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 8px 12px;
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+}
+
+.dock-icon {
+    width: 55px; height: 55px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.dock-icon:hover { transform: scale(1.2) translateY(-10px); }
+.dock-icon span:first-child { font-size: 28px; }
+.dock-label { font-size: 9px; font-weight: 600; color: #333; margin-top: 2px; }

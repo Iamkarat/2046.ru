@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Иван Кудо - 2046.moscow</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            overflow-x: hidden;
+            cursor: crosshair;
+            line-height: 1;
+        }
+        
+        .nav-top {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 1000;
+            mix-blend-mode: difference;
+        }
+        
+        .nav-top a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 10px;
+        }
+        
+        .checkerboard {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(45deg, #e0e0e0 25%, transparent 25%), 
+                linear-gradient(-45deg, #e0e0e0 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #e0e0e0 75%), 
+                linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+            background-size: 40px 40px;
+            background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* WELCOME СЕКЦИЯ */
+        .welcome-section {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            background: #fff;
+        }
+        
+        .welcome-objects {
+            position: relative;
+            width: 100%; height: 100%;
+        }
+        
+        .welcome-object {
+            position: absolute;
+            pointer-events: none;
+            will-change: transform;
+        }
+        
+        .welcome-object img {
+            width: 100%;
+            max-width: 300px;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
+        }
+        
+        .wo-1 { top: 10%; left: 10%; max-width: 250px; }
+        .wo-2 { top: 50%; left: 50%; max-width: 350px; transform: translate(-50%, -50%); }
+        .wo-3 { top: 20%; right: 10%; max-width: 200px; }
+        .wo-4 { bottom: 20%; left: 20%; max-width: 280px; }
+        .wo-5 { bottom: 10%; right: 15%; max-width: 220px; }
+        
+        /* ОСНОВНОЙ КОНТЕНТ */
+        .artist-container {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            z-index: 2;
+            background: #fff;
+        }
+        
+        .artist-name-big {
+            position: absolute;
+            font-size: 15vw;
+            font-weight: 300;
+            color: rgba(0, 0, 0, 0.15);
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            line-height: 0.8;
+            pointer-events: none;
+            z-index: 1;
+            white-space: nowrap;
+        }
+        
+        .artist-subtitle {
+            position: absolute;
+            font-size: 1.5rem;
+            color: rgba(0, 0, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 100px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .artist-photo {
+            position: relative;
+            z-index: 10;
+            max-width: 350px;
+            width: 100%;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+        }
+        
+        .artist-photo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .floating-object {
+            position: absolute;
+            z-index: 5;
+            pointer-events: none;
+        }
+        
+        .object-1 { top: 10%; left: 5%; max-width: 250px; transform: rotate(-15deg); }
+        .object-2 { bottom: 10%; right: 5%; max-width: 300px; transform: rotate(10deg); }
+        .object-3 { top: 20%; right: 15%; max-width: 180px; transform: rotate(25deg); }
+        
+        .floating-object img {
+            width: 100%;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
+        }
+        
+        .interaction-hint {
+            position: fixed;
+            bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(0,0,0,0.5);
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        .social-links {
+            position: fixed;
+            bottom: 20px; left: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .social-links a {
+            width: 35px; height: 35px;
+            border: 1px solid rgba(0,0,0,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 10px;
+        }
+        
+        .back-link {
+            position: fixed;
+            top: 20px; left: 20px;
+            color: #000;
+            text-decoration: none;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 1000;
+            mix-blend-mode: difference;
+        }
+        
+        .gif-section {
+            width: 100%;
+            margin: 0; padding: 0;
+            line-height: 0;
+        }
+        
+        .gif-section img {
+            width: 100%;
+            height: auto;
+            display: block;
+            line-height: 0;
+        }
+        
+        .artworks-section {
+            max-width: 100%;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        
+        .artworks-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0;
+        }
+        
+        .artwork-card {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .artwork-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .artwork-title {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        
+        .artwork-info {
+            color: #666;
+            font-size: 0.85rem;
+            margin: 2px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .artist-name-big { font-size: 20vw; }
+            .artist-subtitle { font-size: 1rem; margin-top: 80px; }
+            .floating-object, .welcome-object { display: none; }
+            .artworks-grid { grid-template-columns: 1fr; }
+            .nav-top { padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-top">
+        <div><a href="index.html">2046</a></div>
+        <div>
+            <a href="#projects">Projects</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <a href="artists.html" class="back-link">← Artists</a>
+    <div class="checkerboard"></div>
+
+    <!-- WELCOME С ХАОТИЧНЫМ ДВИЖЕНИЕМ -->
+    <section class="welcome-section">
+        <div class="welcome-objects">
+            <div class="welcome-object wo-1" data-speed="0.02" data-axis="x">
+                <img src="images/ivan-object-1.png" alt="Object 1">
+            </div>
+            <div class="welcome-object wo-2" data-speed="0.03" data-axis="xy">
+                <img src="images/ivan-object-2.png" alt="Object 2">
+            </div>
+            <div class="welcome-object wo-3" data-speed="0.025" data-axis="y">
+                <img src="images/ivan-object-3.png" alt="Object 3">
+            </div>
+            <div class="welcome-object wo-4" data-speed="0.035" data-axis="xy">
+                <img src="images/ivan-kudo.png" alt="Ivan Kudo">
+            </div>
+            <div class="welcome-object wo-5" data-speed="0.02" data-axis="x">
+                <img src="images/ivan-object-1.png" alt="Object 1">
+            </div>
+        </div>
+    </section>
+
+    <!-- ОСНОВНАЯ СЕКЦИЯ -->
+    <div class="artist-container" id="interactiveZone">
+        <div class="artist-name-big">IVAN KUDO</div>
+        <div class="artist-subtitle">MULTIDISCIPLINARY ARTIST</div>
+        
+        <div class="floating-object object-1" data-speed="0.05">
+            <img src="images/ivan-object-1.png" alt="Object 1">
+        </div>
+        <div class="floating-object object-2" data-speed="0.05">
+            <img src="images/ivan-object-2.png" alt="Object 2">
+        </div>
+        <div class="floating-object object-3" data-speed="0.05">
+            <img src="images/ivan-object-3.png" alt="Object 3">
+        </div>
+        
+        <div class="artist-photo" id="artistPhoto">
+            <img src="images/ivan-kudo.png" alt="Ivan Kudo">
+        </div>
+    </div>
+
+    <div class="interaction-hint">Move Mouse Fast To Interact</div>
+    <div class="social-links"><a href="#">IG</a><a href="#">TG</a></div>
+
+    <!-- GIF и работы -->
+    <section class="gif-section">
+        <img src="images/ivan-welcome.gif" alt="Welcome">
+    </section>
+
+    <section class="artworks-section">
+        <div class="artworks-grid">
+            <div class="artwork-card">
+                <img src="images/flowers-vase.jpg" alt="Цветы в вазе">
+                <div class="artwork-title">Цветы в вазе</div>
+                <div class="artwork-info">100x100, смешанная техника</div>
+                <div class="artwork-info">100.000 р.</div>
+            </div>
+            <div class="artwork-card">
+                <img src="images/coffee-machine.jpg" alt="Кофемашина">
+                <div class="artwork-title">Кофемашина</div>
+                <div class="artwork-info">100x100, смешанная техника</div>
+                <div class="artwork-info">100.000 р.</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Хаотичное движение в welcome
+        const welcomeObjects = document.querySelectorAll('.welcome-object');
+        let time = 0;
+        
+        function animateWelcome() {
+            time += 0.01;
+            welcomeObjects.forEach((obj, index) => {
+                const speed = parseFloat(obj.dataset.speed);
+                const axis = obj.dataset.axis || 'xy';
+                const x = Math.sin(time * speed * 10 + index) * 100 * speed * 5;
+                const y = Math.cos(time * speed * 8 + index * 2) * 100 * speed * 5;
+                const rotate = Math.sin(time * speed * 5 + index) * 10;
+                
+                if (axis === 'x') obj.style.transform = `translateX(${x}px) rotate(${rotate}deg)`;
+                else if (axis === 'y') obj.style.transform = `translateY(${y}px) rotate(${rotate}deg)`;
+                else obj.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
+            });
+            requestAnimationFrame(animateWelcome);
+        }
+        animateWelcome();
+        
+        // Интерактив от быстрых движений мыши
+        let lastX = 0, lastY = 0, lastTime = Date.now();
+        document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            const dt = now - lastTime;
+            if (dt > 0) {
+                const dx = e.clientX - lastX, dy = e.clientY - lastY;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist / dt > 2) {
+                    const photo = document.getElementById('artistPhoto');
+                    if (photo) photo.style.transform = `translate(${dx*0.5}px, ${dy*0.5}px)`;
+                    document.querySelectorAll('.floating-object').forEach((obj, i) => {
+                        const s = parseFloat(obj.dataset.speed) * (i+1);
+                        obj.style.transform += ` translate(${dx*s*2}px, ${dy*s*2}px)`;
+                    });
+                    setTimeout(() => {
+                        if (photo) photo.style.transform = 'translate(0,0)';
+                        document.querySelectorAll('.floating-object').forEach(obj => {
+                            const base = obj.classList.contains('object-1') ? 'rotate(-15deg)' :
+                                        obj.classList.contains('object-2') ? 'rotate(10deg)' : 'rotate(25deg)';
+                            obj.style.transform = base;
+                        });
+                    }, 100);
+                }
+            }
+            lastX = e.clientX; lastY = e.clientY; lastTime = now;
+        });
+    </script>
+</body>
+</html>

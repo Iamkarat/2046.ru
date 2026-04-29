@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Никита Карат - 2046.moscow</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow-x: hidden;
+        }
+        
+        /* GIF с костями - сразу после шапки без отступов */
+        .welcome-gif {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0;
+            padding: 0;
+            line-height: 0;
+        }
+        
+        .artist-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 20px 40px 20px; /* Уменьшил верхний отступ */
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #000;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .artist-title {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+        
+        .artist-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+        
+        .artworks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px; /* Уменьшил отступы */
+            margin-bottom: 50px;
+        }
+        
+        .artwork-card {
+            text-align: center;
+        }
+        
+        .artwork-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .artwork-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .artwork-info {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 3px;
+        }
+        
+        .artwork-price {
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        
+        /* Секция Триптих */
+        .triptych-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #000;
+        }
+        
+        .triptych-title {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .triptych-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px; /* Минимальные отступы */
+        }
+        
+        .triptych-card {
+            text-align: center;
+        }
+        
+        .triptych-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .triptych-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .artworks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ШАПКА САЙТА -->
+    <header class="site-header">
+        <div class="header-left">
+            <a href="index.html" class="site-title">2046</a>
+        </div>
+        <nav class="nav-menu">
+            <a href="sound.html" class="nav-item">SOUND</a>
+            <a href="food.html" class="nav-item">FOOD</a>
+            <a href="about.html" class="nav-item">ABOUT</a>
+            <a href="clothes.html" class="nav-item">CLOTHES</a>
+            <a href="artists.html" class="nav-item">ARTISTS</a>
+        </nav>
+    </header>
+
+    <!-- GIF с костями - без отступов -->
+    <img src="images/welcome-bones.gif" alt="Welcome" class="welcome-gif">
+
+    <!-- Контент страницы артиста -->
+    <div class="artist-page">
+        
+        <a href="artists.html" class="back-link">← Назад к артистам</a>
+        
+        <h1 class="artist-title">Никита Карат</h1>
+        <p class="artist-subtitle">Художник / Артист</p>
+        
+        <!-- Первые три работы -->
+        <div class="artworks-grid">
+            
+            <!-- Работа 1: Искушение -->
+            <div class="artwork-card">
+                <img src="images/iskushenie.jpg" alt="Искушение">
+                <div class="artwork-title">искушение</div>
+                <div class="artwork-info">100x100, смешанная техника</div>
+                <div class="artwork-price">100.000 р.</div>
+            </div>
+            
+            <!-- Работа 2: Без названия -->
+            <div class="artwork-card">
+                <img src="images/bez-nazvaniya.jpg" alt="Без названия">
+                <div class="artwork-title">без названия</div>
+                <div class="artwork-info">100x100, смешанная техника</div>
+                <div class="artwork-price">100.000 р.</div>
+            </div>
+            
+            <!-- Работа 3: Олимпийский огонь -->
+            <div class="artwork-card">
+                <img src="images/olimpiyskiy-ogon.jpg" alt="Олимпийский огонь">
+                <div class="artwork-title">олимпийский огонь</div>
+                <div class="artwork-info">100x100, смешанная техника</div>
+                <div class="artwork-price">100.000 р.</div>
+            </div>
+            
+        </div>
+        
+        <!-- Секция Триптих -->
+        <div class="triptych-section">
+            <h2 class="triptych-title">Триптих</h2>
+            
+            <div class="triptych-grid">
+                
+                <!-- Часть 1 -->
+                <div class="triptych-card">
+                    <img src="images/triptych-1.jpg" alt="Триптих часть 1">
+                    <div class="artwork-info">100x100, смешанная техника</div>
+                    <div class="artwork-price">150.000 р.</div>
+                </div>
+                
+                <!-- Часть 2 -->
+                <div class="triptych-card">
+                    <img src="images/triptych-2.jpg" alt="Триптих часть 2">
+                    <div class="artwork-info">100x100, смешанная техника</div>
+                    <div class="artwork-price">150.000 р.</div>
+                </div>
+                
+                <!-- Часть 3 -->
+                <div class="triptych-card">
+                    <img src="images/triptych-3.jpg" alt="Триптих часть 3">
+                    <div class="artwork-info">100x100, смешанная техника</div>
+                    <div class="artwork-price">150.000 р.</div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+</html>

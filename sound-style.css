@@ -1,0 +1,77 @@
+@font-face {
+    font-family: 'MyFont';
+    src: url('fonts/myfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'MyFont', 'Times New Roman', Times, serif;
+}
+/* Видео фон на всю страницу */
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.3); /* Затемнение фона */
+}
+
+/* Контент по центру */
+.sound-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 60px; /* Отступ для шапки */
+}
+
+/* Контейнер для видео */
+.video-container {
+    width: 80%;
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    box-shadow: 0 0 50px rgba(0, 255, 0, 0.3);
+    border: 1px solid #00ff00;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Кнопка назад */
+.back-btn {
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+    color: #00ff00;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.back-btn:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #00ff00;
+}
+
+/* Адаптивность */
+@media (max-width: 900px) {
+    .video-container {
+        width: 95%;
+    }
+    .back-btn {
+        bottom: 20px;
+        left: 20px;
+    }
+}

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аврора Родин - 2046.moscow</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            overflow-x: hidden;
+        }
+
+        /* Навигация сверху */
+        .nav-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-top a {
+            color: #000;
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: opacity 0.3s;
+        }
+
+        .nav-top a:hover {
+            opacity: 0.6;
+        }
+
+        .site-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .back-link {
+            color: #000;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* HERO — первое фото */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            margin-top: 0;
+        }
+
+        .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 60px 40px 50px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+        }
+
+        .hero-name {
+            color: #fff;
+            font-size: clamp(36px, 6vw, 80px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        /* ГАЛЕРЕЯ */
+        .gallery-section {
+            padding: 16px;
+            background: #0a0a0a;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 6px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            background: #1a1a1a;
+            aspect-ratio: 3 / 4;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease, opacity 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.04);
+            opacity: 0.85;
+        }
+
+        .gallery-item .num {
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            color: rgba(255,255,255,0.4);
+            font-size: 11px;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+
+        /* ЛАЙТБОКС */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-img {
+            max-width: 90vw;
+            max-height: 88vh;
+            object-fit: contain;
+            border: none;
+            user-select: none;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 28px;
+            color: #fff;
+            font-size: 32px;
+            cursor: pointer;
+            line-height: 1;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            background: none;
+            border: none;
+        }
+
+        .lightbox-close:hover { opacity: 1; }
+
+        .lightbox-prev,
+        .lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 16px 20px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            background: none;
+            border: none;
+            user-select: none;
+        }
+
+        .lightbox-prev:hover,
+        .lightbox-next:hover { opacity: 1; }
+
+        .lightbox-prev { left: 12px; }
+        .lightbox-next { right: 12px; }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: 16px;
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Навигация сверху -->
+    <nav class="nav-top">
+        <div class="nav-left">
+            <a href="index.html" class="site-title">2046</a>
+            <a href="artists.html" class="back-link">← ARTISTS</a>
+        </div>
+    </nav>
+
+    <!-- HERO — фото 1 -->
+    <section class="hero">
+        <img
+            src="https://lh3.googleusercontent.com/d/1tUnayyUn5xYjziavYtB6GopTr8UL-mre"
+            alt="Аврора Родин"
+            loading="eager"
+        >
+        <div class="hero-overlay">
+            <h1 class="hero-name">Аврора Родин</h1>
+        </div>
+    </section>
+
+    <!-- ГАЛЕРЕЯ — фото 2–52 -->
+    <section class="gallery-section">
+        <div class="gallery-grid" id="gallery">
+
+            <!-- 2 -->
+            <div class="gallery-item" data-index="0">
+                <img src="https://lh3.googleusercontent.com/d/1kBZRjfcr_ivpnQosquBYqArnnCbfjiTY" alt="Аврора Родин 2" loading="lazy">
+                <span class="num">02</span>
+            </div>
+
+            <!-- 3 -->
+            <div class="gallery-item" data-index="1">
+                <img src="https://lh3.googleusercontent.com/d/1i7f0PRLecwKJQreb4UrQKRofdcXNYq6l" alt="Аврора Родин 3" loading="lazy">
+                <span class="num">03</span>
+            </div>
+
+            <!-- 4 -->
+            <div class="gallery-item" data-index="2">
+                <img src="https://lh3.googleusercontent.com/d/1H-P6TkZVoMhOVQtTNHfldcVew5QA9JEA" alt="Аврора Родин 4" loading="lazy">
+                <span class="num">04</span>
+            </div>
+
+            <!-- 5 -->
+            <div class="gallery-item" data-index="3">
+                <img src="https://lh3.googleusercontent.com/d/1IPHgNURaO8QcaPcTs3nY5rcAhb5tOCb2" alt="Аврора Родин 5" loading="lazy">
+                <span class="num">05</span>
+            </div>
+
+            <!-- 6 -->
+            <div class="gallery-item" data-index="4">
+                <img src="https://lh3.googleusercontent.com/d/1yT8vBkpO1t7VXdqNcO-NWt7UHjB84M03" alt="Аврора Родин 6" loading="lazy">
+                <span class="num">06</span>
+            </div>
+
+            <!-- 7 -->
+            <div class="gallery-item" data-index="5">
+                <img src="https://lh3.googleusercontent.com/d/1u0JSjRK-kvtgLNXRu1wLqE7RSq4yaNJu" alt="Аврора Родин 7" loading="lazy">
+                <span class="num">07</span>
+            </div>
+
+            <!-- 8 -->
+            <div class="gallery-item" data-index="6">
+                <img src="https://lh3.googleusercontent.com/d/187-fkgQUwbC39_RPWsGuVq1dl7A_OMhx" alt="Аврора Родин 8" loading="lazy">
+                <span class="num">08</span>
+            </div>
+
+            <!-- 9 -->
+            <div class="gallery-item" data-index="7">
+                <img src="https://lh3.googleusercontent.com/d/175kEWpWTw55KSlmulc9QoRAlQqFWP0Ta" alt="Аврора Родин 9" loading="lazy">
+                <span class="num">09</span>
+            </div>
+
+            <!-- 10 -->
+            <div class="gallery-item" data-index="8">
+                <img src="https://lh3.googleusercontent.com/d/1w613si9QBD6b301lahGKtohzmaQXZTKl" alt="Аврора Родин 10" loading="lazy">
+                <span class="num">10</span>
+            </div>
+
+            <!-- 11 -->
+            <div class="gallery-item" data-index="9">
+                <img src="https://lh3.googleusercontent.com/d/180yDCaZn26M_W_vPajPAerzElgJf2vfy" alt="Аврора Родин 11" loading="lazy">
+                <span class="num">11</span>
+            </div>
+
+            <!-- 12 -->
+            <div class="gallery-item" data-index="10">
+                <img src="https://lh3.googleusercontent.com/d/1AHTMNvmxd-PU1qasRRr32OV94T_p3B-4" alt="Аврора Родин 12" loading="lazy">
+                <span class="num">12</span>
+            </div>
+
+            <!-- 13 -->
+            <div class="gallery-item" data-index="11">
+                <img src="https://lh3.googleusercontent.com/d/1Mbnvc1gjxgNTUIj8c4Ox8Jsl0wFk3d9H" alt="Аврора Родин 13" loading="lazy">
+                <span class="num">13</span>
+            </div>
+
+            <!-- 14 -->
+            <div class="gallery-item" data-index="12">
+                <img src="https://lh3.googleusercontent.com/d/1S6uWs20_f_SYyZDFa-DHjtSvtYLwpsbF" alt="Аврора Родин 14" loading="lazy">
+                <span class="num">14</span>
+            </div>
+
+            <!-- 15 -->
+            <div class="gallery-item" data-index="13">
+                <img src="https://lh3.googleusercontent.com/d/1yrWK9pSURdL4GZ1PSnK3cHBEkKREuLa_" alt="Аврора Родин 15" loading="lazy">
+                <span class="num">15</span>
+            </div>
+
+            <!-- 16 -->
+            <div class="gallery-item" data-index="14">
+                <img src="https://lh3.googleusercontent.com/d/12QsWz0taLeS9bkbtPcW4bKmvyYBjglnV" alt="Аврора Родин 16" loading="lazy">
+                <span class="num">16</span>
+            </div>
+
+            <!-- 17 -->
+            <div class="gallery-item" data-index="15">
+                <img src="https://lh3.googleusercontent.com/d/1JGx_eVXpgDbKKevjoTzmt6iqv_JQ0TyZ" alt="Аврора Родин 17" loading="lazy">
+                <span class="num">17</span>
+            </div>
+
+            <!-- 18 -->
+            <div class="gallery-item" data-index="16">
+                <img src="https://lh3.googleusercontent.com/d/1Uskby5mNdMlUkuw7qanUqLEmQJsEilSa" alt="Аврора Родин 18" loading="lazy">
+                <span class="num">18</span>
+            </div>
+
+            <!-- 19 -->
+            <div class="gallery-item" data-index="17">
+                <img src="https://lh3.googleusercontent.com/d/1WfQz5NjpWton2t15vciVyphaLAFT7BGR" alt="Аврора Родин 19" loading="lazy">
+                <span class="num">19</span>
+            </div>
+
+            <!-- 20 -->
+            <div class="gallery-item" data-index="18">
+                <img src="https://lh3.googleusercontent.com/d/12jwzGopC2k-rYJ0iX9iOdPX8c3PoPOzy" alt="Аврора Родин 20" loading="lazy">
+                <span class="num">20</span>
+            </div>
+
+            <!-- 21 -->
+            <div class="gallery-item" data-index="19">
+                <img src="https://lh3.googleusercontent.com/d/1ZmmsI9Yy4mT_NwRketlgDg9TellUy5yu" alt="Аврора Родин 21" loading="lazy">
+                <span class="num">21</span>
+            </div>
+
+            <!-- 22 -->
+            <div class="gallery-item" data-index="20">
+                <img src="https://lh3.googleusercontent.com/d/1DpGwEpNQesnSDTwLZE8opuIWOBh9gtmt" alt="Аврора Родин 22" loading="lazy">
+                <span class="num">22</span>
+            </div>
+
+            <!-- 23 -->
+            <div class="gallery-item" data-index="21">
+                <img src="https://lh3.googleusercontent.com/d/1BYrwxr6QNApMaNXrWBYGqYGt4vFFvXP3" alt="Аврора Родин 23" loading="lazy">
+                <span class="num">23</span>
+            </div>
+
+            <!-- 24 -->
+            <div class="gallery-item" data-index="22">
+                <img src="https://lh3.googleusercontent.com/d/1Akx8eOgNWgtfotpPVExTn1LfsCM6o5XF" alt="Аврора Родин 24" loading="lazy">
+                <span class="num">24</span>
+            </div>
+
+            <!-- 25 -->
+            <div class="gallery-item" data-index="23">
+                <img src="https://lh3.googleusercontent.com/d/1BLtMFwIu1iNou8boDglrxYs8dn3-T4uW" alt="Аврора Родин 25" loading="lazy">
+                <span class="num">25</span>
+            </div>
+
+            <!-- 26 -->
+            <div class="gallery-item" data-index="24">
+                <img src="https://lh3.googleusercontent.com/d/1LcQK6Mke9kXHUkz7XVdctg12RDKUi1e6" alt="Аврора Родин 26" loading="lazy">
+                <span class="num">26</span>
+            </div>
+
+            <!-- 27 -->
+            <div class="gallery-item" data-index="25">
+                <img src="https://lh3.googleusercontent.com/d/1klX3JuYDD-oJbTaaNBzRNNzcBtasfHOq" alt="Аврора Родин 27" loading="lazy">
+                <span class="num">27</span>
+            </div>
+
+            <!-- 28 -->
+            <div class="gallery-item" data-index="26">
+                <img src="https://lh3.googleusercontent.com/d/1j4nZ-vAgiON9KZqlC7IIyHku-wQipkdN" alt="Аврора Родин 28" loading="lazy">
+                <span class="num">28</span>
+            </div>
+
+            <!-- 29 -->
+            <div class="gallery-item" data-index="27">
+                <img src="https://lh3.googleusercontent.com/d/1CpioEbGPZvAwj27Pg_v7SDlVJrHe6dNo" alt="Аврора Родин 29" loading="lazy">
+                <span class="num">29</span>
+            </div>
+
+            <!-- 30 -->
+            <div class="gallery-item" data-index="28">
+                <img src="https://lh3.googleusercontent.com/d/1-FOAKULQtMvy8e8rDkMZ-1s-XRtRazEw" alt="Аврора Родин 30" loading="lazy">
+                <span class="num">30</span>
+            </div>
+
+            <!-- 31 -->
+            <div class="gallery-item" data-index="29">
+                <img src="https://lh3.googleusercontent.com/d/1QHyIgM3EdG1nFz4GEnve3SdGjDTCk4s3" alt="Аврора Родин 31" loading="lazy">
+                <span class="num">31</span>
+            </div>
+
+            <!-- 32 -->
+            <div class="gallery-item" data-index="30">
+                <img src="https://lh3.googleusercontent.com/d/11dgSqohd9QyJRD-48EWE_U7kcgOTMj-T" alt="Аврора Родин 32" loading="lazy">
+                <span class="num">32</span>
+            </div>
+
+            <!-- 33 -->
+            <div class="gallery-item" data-index="31">
+                <img src="https://lh3.googleusercontent.com/d/1pw6u6_cSEPtKoCesLW5yDbLxSxD3ngI8" alt="Аврора Родин 33" loading="lazy">
+                <span class="num">33</span>
+            </div>
+
+            <!-- 34 -->
+            <div class="gallery-item" data-index="32">
+                <img src="https://lh3.googleusercontent.com/d/1xs8hrxUSgehz4Tki-VAnkMcFC8mmPSs8" alt="Аврора Родин 34" loading="lazy">
+                <span class="num">34</span>
+            </div>
+
+            <!-- 35 -->
+            <div class="gallery-item" data-index="33">
+                <img src="https://lh3.googleusercontent.com/d/1cBsHT5ie4rXLH94r5gI3pDMTNOBsrQn5" alt="Аврора Родин 35" loading="lazy">
+                <span class="num">35</span>
+            </div>
+
+            <!-- 36 -->
+            <div class="gallery-item" data-index="34">
+                <img src="https://lh3.googleusercontent.com/d/1c8B95NKzg_J5GGN5ktat36zjYKd3a3ia" alt="Аврора Родин 36" loading="lazy">
+                <span class="num">36</span>
+            </div>
+
+            <!-- 37 -->
+            <div class="gallery-item" data-index="35">
+                <img src="https://lh3.googleusercontent.com/d/1NjCEIvsZ8E-0dfnGNh0usRXD0dLBgZn7" alt="Аврора Родин 37" loading="lazy">
+                <span class="num">37</span>
+            </div>
+
+            <!-- 38 -->
+            <div class="gallery-item" data-index="36">
+                <img src="https://lh3.googleusercontent.com/d/1aUJqFG8jrIPwwnKXhtcOLIRWCr8MGn2Q" alt="Аврора Родин 38" loading="lazy">
+                <span class="num">38</span>
+            </div>
+
+            <!-- 39 -->
+            <div class="gallery-item" data-index="37">
+                <img src="https://lh3.googleusercontent.com/d/1qtfnfmUQRqpJr3y22lc58jmRYH0-FJQx" alt="Аврора Родин 39" loading="lazy">
+                <span class="num">39</span>
+            </div>
+
+            <!-- 40 -->
+            <div class="gallery-item" data-index="38">
+                <img src="https://lh3.googleusercontent.com/d/1PXeMaPZuh6milmHwRXKbO1eyZudYP38K" alt="Аврора Родин 40" loading="lazy">
+                <span class="num">40</span>
+            </div>
+
+            <!-- 41 -->
+            <div class="gallery-item" data-index="39">
+                <img src="https://lh3.googleusercontent.com/d/19oSrE7rnb2cgXRa38NYhXwKTScQM7sqc" alt="Аврора Родин 41" loading="lazy">
+                <span class="num">41</span>
+            </div>
+
+            <!-- 42 -->
+            <div class="gallery-item" data-index="40">
+                <img src="https://lh3.googleusercontent.com/d/1zuewcgXxNoieYmWKr4hp65f7CWwgiPNa" alt="Аврора Родин 42" loading="lazy">
+                <span class="num">42</span>
+            </div>
+
+            <!-- 43 -->
+            <div class="gallery-item" data-index="41">
+                <img src="https://lh3.googleusercontent.com/d/13cCQbb9odx3OEDKQWRNmSvtSJN-X6_oa" alt="Аврора Родин 43" loading="lazy">
+                <span class="num">43</span>
+            </div>
+
+            <!-- 44 -->
+            <div class="gallery-item" data-index="42">
+                <img src="https://lh3.googleusercontent.com/d/1fc7crEnsi9Nm_tg7Ovd1QIep24MB3WYp" alt="Аврора Родин 44" loading="lazy">
+                <span class="num">44</span>
+            </div>
+
+            <!-- 45 -->
+            <div class="gallery-item" data-index="43">
+                <img src="https://lh3.googleusercontent.com/d/1IIQ12RfmB4ILA2PGfTHMlf2fCcyXxE0I" alt="Аврора Родин 45" loading="lazy">
+                <span class="num">45</span>
+            </div>
+
+            <!-- 46 -->
+            <div class="gallery-item" data-index="44">
+                <img src="https://lh3.googleusercontent.com/d/1janEuydfAcezA477MUJvDwdzjvjlUMV_" alt="Аврора Родин 46" loading="lazy">
+                <span class="num">46</span>
+            </div>
+
+            <!-- 47 -->
+            <div class="gallery-item" data-index="45">
+                <img src="https://lh3.googleusercontent.com/d/1pnIk0J2SJlpbiqtzfwd882dboJw9N2S2" alt="Аврора Родин 47" loading="lazy">
+                <span class="num">47</span>
+            </div>
+
+            <!-- 48 -->
+            <div class="gallery-item" data-index="46">
+                <img src="https://lh3.googleusercontent.com/d/1qv4G971HCdp_9hVurLTFgQi1GmBR5aRG" alt="Аврора Родин 48" loading="lazy">
+                <span class="num">48</span>
+            </div>
+
+            <!-- 49 -->
+            <div class="gallery-item" data-index="47">
+                <img src="https://lh3.googleusercontent.com/d/1uhRN0i5D2IUdP00PskNb9oJXHOpvQ_x8" alt="Аврора Родин 49" loading="lazy">
+                <span class="num">49</span>
+            </div>
+
+            <!-- 50 -->
+            <div class="gallery-item" data-index="48">
+                <img src="https://lh3.googleusercontent.com/d/1qed3RAUCSa0sCfw4qtLBSiKGiWi1Lrlo" alt="Аврора Родин 50" loading="lazy">
+                <span class="num">50</span>
+            </div>
+
+            <!-- 51 -->
+            <div class="gallery-item" data-index="49">
+                <img src="https://lh3.googleusercontent.com/d/1YVyf2yi2BnO09BzfOdXjZMYkE_cAkZHG" alt="Аврора Родин 51" loading="lazy">
+                <span class="num">51</span>
+            </div>
+
+            <!-- 52 -->
+            <div class="gallery-item" data-index="50">
+                <img src="https://lh3.googleusercontent.com/d/1qWOvOukllAzaljXAvY5wFWMXktUmYjkh" alt="Аврора Родин 52" loading="lazy">
+                <span class="num">52</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ЛАЙТБОКС -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lb-close">&#x2715;</button>
+        <button class="lightbox-prev" id="lb-prev">&#8592;</button>
+        <img class="lightbox-img" id="lb-img" src="" alt="">
+        <button class="lightbox-next" id="lb-next">&#8594;</button>
+        <span class="lightbox-counter" id="lb-counter"></span>
+    </div>
+
+    <script>
+        const srcs = [
+            'https://lh3.googleusercontent.com/d/1kBZRjfcr_ivpnQosquBYqArnnCbfjiTY',
+            'https://lh3.googleusercontent.com/d/1i7f0PRLecwKJQreb4UrQKRofdcXNYq6l',
+            'https://lh3.googleusercontent.com/d/1H-P6TkZVoMhOVQtTNHfldcVew5QA9JEA',
+            'https://lh3.googleusercontent.com/d/1IPHgNURaO8QcaPcTs3nY5rcAhb5tOCb2',
+            'https://lh3.googleusercontent.com/d/1yT8vBkpO1t7VXdqNcO-NWt7UHjB84M03',
+            'https://lh3.googleusercontent.com/d/1u0JSjRK-kvtgLNXRu1wLqE7RSq4yaNJu',
+            'https://lh3.googleusercontent.com/d/187-fkgQUwbC39_RPWsGuVq1dl7A_OMhx',
+            'https://lh3.googleusercontent.com/d/175kEWpWTw55KSlmulc9QoRAlQqFWP0Ta',
+            'https://lh3.googleusercontent.com/d/1w613si9QBD6b301lahGKtohzmaQXZTKl',
+            'https://lh3.googleusercontent.com/d/180yDCaZn26M_W_vPajPAerzElgJf2vfy',
+            'https://lh3.googleusercontent.com/d/1AHTMNvmxd-PU1qasRRr32OV94T_p3B-4',
+            'https://lh3.googleusercontent.com/d/1Mbnvc1gjxgNTUIj8c4Ox8Jsl0wFk3d9H',
+            'https://lh3.googleusercontent.com/d/1S6uWs20_f_SYyZDFa-DHjtSvtYLwpsbF',
+            'https://lh3.googleusercontent.com/d/1yrWK9pSURdL4GZ1PSnK3cHBEkKREuLa_',
+            'https://lh3.googleusercontent.com/d/12QsWz0taLeS9bkbtPcW4bKmvyYBjglnV',
+            'https://lh3.googleusercontent.com/d/1JGx_eVXpgDbKKevjoTzmt6iqv_JQ0TyZ',
+            'https://lh3.googleusercontent.com/d/1Uskby5mNdMlUkuw7qanUqLEmQJsEilSa',
+            'https://lh3.googleusercontent.com/d/1WfQz5NjpWton2t15vciVyphaLAFT7BGR',
+            'https://lh3.googleusercontent.com/d/12jwzGopC2k-rYJ0iX9iOdPX8c3PoPOzy',
+            'https://lh3.googleusercontent.com/d/1ZmmsI9Yy4mT_NwRketlgDg9TellUy5yu',
+            'https://lh3.googleusercontent.com/d/1DpGwEpNQesnSDTwLZE8opuIWOBh9gtmt',
+            'https://lh3.googleusercontent.com/d/1BYrwxr6QNApMaNXrWBYGqYGt4vFFvXP3',
+            'https://lh3.googleusercontent.com/d/1Akx8eOgNWgtfotpPVExTn1LfsCM6o5XF',
+            'https://lh3.googleusercontent.com/d/1BLtMFwIu1iNou8boDglrxYs8dn3-T4uW',
+            'https://lh3.googleusercontent.com/d/1LcQK6Mke9kXHUkz7XVdctg12RDKUi1e6',
+            'https://lh3.googleusercontent.com/d/1klX3JuYDD-oJbTaaNBzRNNzcBtasfHOq',
+            'https://lh3.googleusercontent.com/d/1j4nZ-vAgiON9KZqlC7IIyHku-wQipkdN',
+            'https://lh3.googleusercontent.com/d/1CpioEbGPZvAwj27Pg_v7SDlVJrHe6dNo',
+            'https://lh3.googleusercontent.com/d/1-FOAKULQtMvy8e8rDkMZ-1s-XRtRazEw',
+            'https://lh3.googleusercontent.com/d/1QHyIgM3EdG1nFz4GEnve3SdGjDTCk4s3',
+            'https://lh3.googleusercontent.com/d/11dgSqohd9QyJRD-48EWE_U7kcgOTMj-T',
+            'https://lh3.googleusercontent.com/d/1pw6u6_cSEPtKoCesLW5yDbLxSxD3ngI8',
+            'https://lh3.googleusercontent.com/d/1xs8hrxUSgehz4Tki-VAnkMcFC8mmPSs8',
+            'https://lh3.googleusercontent.com/d/1cBsHT5ie4rXLH94r5gI3pDMTNOBsrQn5',
+            'https://lh3.googleusercontent.com/d/1c8B95NKzg_J5GGN5ktat36zjYKd3a3ia',
+            'https://lh3.googleusercontent.com/d/1NjCEIvsZ8E-0dfnGNh0usRXD0dLBgZn7',
+            'https://lh3.googleusercontent.com/d/1aUJqFG8jrIPwwnKXhtcOLIRWCr8MGn2Q',
+            'https://lh3.googleusercontent.com/d/1qtfnfmUQRqpJr3y22lc58jmRYH0-FJQx',
+            'https://lh3.googleusercontent.com/d/1PXeMaPZuh6milmHwRXKbO1eyZudYP38K',
+            'https://lh3.googleusercontent.com/d/19oSrE7rnb2cgXRa38NYhXwKTScQM7sqc',
+            'https://lh3.googleusercontent.com/d/1zuewcgXxNoieYmWKr4hp65f7CWwgiPNa',
+            'https://lh3.googleusercontent.com/d/13cCQbb9odx3OEDKQWRNmSvtSJN-X6_oa',
+            'https://lh3.googleusercontent.com/d/1fc7crEnsi9Nm_tg7Ovd1QIep24MB3WYp',
+            'https://lh3.googleusercontent.com/d/1IIQ12RfmB4ILA2PGfTHMlf2fCcyXxE0I',
+            'https://lh3.googleusercontent.com/d/1janEuydfAcezA477MUJvDwdzjvjlUMV_',
+            'https://lh3.googleusercontent.com/d/1pnIk0J2SJlpbiqtzfwd882dboJw9N2S2',
+            'https://lh3.googleusercontent.com/d/1qv4G971HCdp_9hVurLTFgQi1GmBR5aRG',
+            'https://lh3.googleusercontent.com/d/1uhRN0i5D2IUdP00PskNb9oJXHOpvQ_x8',
+            'https://lh3.googleusercontent.com/d/1qed3RAUCSa0sCfw4qtLBSiKGiWi1Lrlo',
+            'https://lh3.googleusercontent.com/d/1YVyf2yi2BnO09BzfOdXjZMYkE_cAkZHG',
+            'https://lh3.googleusercontent.com/d/1qWOvOukllAzaljXAvY5wFWMXktUmYjkh'
+        ];
+
+        let current = 0;
+        const lightbox = document.getElementById('lightbox');
+        const lbImg    = document.getElementById('lb-img');
+        const lbCount  = document.getElementById('lb-counter');
+
+        function open(idx) {
+            current = idx;
+            lbImg.src = srcs[current];
+            lbCount.textContent = (current + 2) + ' / 52';
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function close() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            lbImg.src = '';
+        }
+
+        function prev() {
+            current = (current - 1 + srcs.length) % srcs.length;
+            lbImg.src = srcs[current];
+            lbCount.textContent = (current + 2) + ' / 52';
+        }
+
+        function next() {
+            current = (current + 1) % srcs.length;
+            lbImg.src = srcs[current];
+            lbCount.textContent = (current + 2) + ' / 52';
+        }
+
+        document.querySelectorAll('.gallery-item').forEach(el => {
+            el.addEventListener('click', () => open(+el.dataset.index));
+        });
+
+        document.getElementById('lb-close').addEventListener('click', close);
+        document.getElementById('lb-prev').addEventListener('click', prev);
+        document.getElementById('lb-next').addEventListener('click', next);
+
+        lightbox.addEventListener('click', e => {
+            if (e.target === lightbox) close();
+        });
+
+        document.addEventListener('keydown', e => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape')      close();
+            if (e.key === 'ArrowLeft')   prev();
+            if (e.key === 'ArrowRight')  next();
+        });
+    </script>
+
+</body>
+</html>
